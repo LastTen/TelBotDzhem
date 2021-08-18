@@ -11,12 +11,3 @@ dataConect = {
   "pg_user": "postgres",
   'Token_TG': "TOKEN TG"
 }
-
-
-
-
-
-
-
-
-
