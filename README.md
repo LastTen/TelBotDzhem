@@ -1,7 +1,6 @@
 # TelBotDzhem
 
-## To connect, create a dataConect.py file
-### Where in the dictionary create your own data
+## To connect, create a **dataConect.py** file. Where in the dictionary create your own data.
 
 dataConect = {
   "pg_host": "localhost",
