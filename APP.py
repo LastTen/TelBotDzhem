@@ -1,10 +1,9 @@
 import telebot
-from dataConect import dataConect
-from locationSort import d
-import reg_funk
-
 import psycopg2
 from dataConect import dataConect
+import reg_funk
+
+
 connection = psycopg2.connect(
   database = dataConect["pg_name"],
   user = dataConect["pg_user"],
@@ -19,9 +18,6 @@ bot = telebot.TeleBot(dataConect['Token_TG'])
 print('start')
 
 
-
-
-
 ######################____БОТ____###################
 ###################################__КОМАНДИ__################
 @bot.message_handler(commands=['start'])
@@ -34,32 +30,28 @@ def send_welcome(message):
   bot.send_message(message.chat.id, "Для початку вибери напрямок /calendar")
 
 @bot.message_handler(commands=['calendar'])
-def calendar(message):
-  cursor.execute(f"SELECT CONCAT(title, ' відбудеться  ', EXTRACT(day FROM DATE), '-', EXTRACT(month FROM date), '  детальніше...    ', category) FROM events WHERE date >= CURRENT_DATE")
-  res = ()
-  for k in cursor.fetchall():
-    res += k
-  for mess in res:
-    bot.send_message(message.chat.id, mess)
+def send_calendar(message):
+  text_calendar = reg_funk.calendar()
+  bot.send_message(message.chat.id, text_calendar)
+
+@bot.message_handler(commands=['location'])
+def send_location1(message):
+  bot.send_message(message.chat.id, 'Введіть порядковий номер бажаной локації')
+  bot.register_next_step_handler(message, answer_loc)
+
+def answer_loc(message):
+  bot.send_location(message.chat.id, reg_funk.send_location_li(message.text), reg_funk.send_location_lo(message.text))
 
 
-#########################__TEXT__#####################
-# @bot.message_handler(content_types= ['text'])
-# def send_helper(message):
-#   print(message.chat.id)
-#   print(message.chat.username)
-#   print(message.text)
-#   bot.send_message(message.chat.id, 'hello')
 
 
+########################__TEXT__#####################
 @bot.message_handler(content_types= ['text'])
 def send_helper(message):
-  for k in d:
-    if k == message.text:
-      # mess_text = f"Координата обєкта {d[k]['li']}широти {d[k]['lo']}довготи"
-      bot.send_location(message.chat.id, d[k]['li'],d[k]['lo'])
-
-
+  print(message.chat.id)
+  print(message.chat.username)
+  print(message.text)
+  bot.send_message(message.chat.id, 'hello')
 
 
 

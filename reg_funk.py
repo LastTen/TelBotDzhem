@@ -1,5 +1,8 @@
 import psycopg2
 from dataConect import dataConect
+from locationSort import location
+
+
 connection = psycopg2.connect(
   database = dataConect["pg_name"],
   user = dataConect["pg_user"],
@@ -22,4 +25,26 @@ def selReg(idtg, nametg):
   elif cursor.fetchone() == None:
      registration(idtg, nametg)
      return(f'Вітаю чим можу допомогти');
+
+def calendar():
+  cursor.execute(f"SELECT CONCAT(title, ' відбудеться  ', EXTRACT(day FROM DATE), '-', EXTRACT(month FROM date), '  детальніше...    ', category) FROM events WHERE date >= CURRENT_DATE")
+  res = ()
+  for k in cursor.fetchall():
+    res += k
+  return('\n'.join(res))
+
+
+
+def send_location_li(num_location):
+  for k in location:
+    if k == num_location:
+      return location[k]['li']
+
+def send_location_lo(num_location):
+  for k in location:
+    if k == num_location:
+      return location[k]['lo']
+
+
+
 
