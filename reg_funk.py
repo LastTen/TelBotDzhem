@@ -53,10 +53,49 @@ def send_location_lo(num_location):
       return location[k]['lo']
 
 
+
+#### ОБРОБКА ТЕКСТА #####
+def qwest_user(text):
+  message_qwest = []
+  text_user = text.lower().replace('?', '').replace('.', '').replace(',', '')
+  list_text = text_user.split(' ')
+  for len_text in list_text:
+    if len(len_text) > 3:
+      message_qwest.append(len_text)
+  return message_qwest
+
+
+def message_category(text):
+  qwest = qwest_user(text)
+  message_answer = []
+  for key in qwest:
+    if key[0] == '/':
+      cursor = connection.cursor()
+      cursor.execute("SELECT category_name, description FROM category")
+      category_data = cursor.fetchall()
+      cursor.close()
+      for n_category in category_data:
+        if n_category[0] == key:
+          message_answer.append(n_category[1])
+  return message_answer
+  
+
 def message_user(text):
-  text_user = f"'{text}%'"
-  cursor = connection.cursor()
-  cursor.execute(f"Select * FROM answer Where qwest LIKE{text_user}")
-  answer = cursor.fetchone()[2]
-  cursor.close()
-  return(answer)
+  qwest = qwest_user(text)
+  category = message_category(text)
+  message_answer = []
+  if category == []:
+    for key in qwest:
+      cursor = connection.cursor()
+      like_qwest = f"'{key}%'"
+      cursor.execute(f"SELECT answer FROM answer WHERE qwest LIKE {like_qwest}")
+      answer_text = cursor.fetchall()
+      cursor.close()
+      if answer_text !=[]:
+        message_answer.append(' '.join(answer_text[0]))
+  else:
+    message_answer.append(' \n'.join(category))
+  return message_answer
+
+
+print(message_user('Прfhfh fffhfhf fkfkfkf приві погода '))

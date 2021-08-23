@@ -19,8 +19,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['calendar'])
 def send_calendar(message):
-  text_calendar = reg_funk.calendar()
-  bot.send_message(message.chat.id, text_calendar)
+  bot.send_message(message.chat.id, reg_funk.calendar())
 
 @bot.message_handler(commands=['location'])
 def send_location_qwest(message):
@@ -40,8 +39,7 @@ def send_message(message):
   print(message.chat.id)
   print(message.chat.username)
   print(message.text)
-  text_message = reg_funk.message_user(message.text)
-  bot.send_message(message.chat.id, text_message)
+  bot.send_message(message.chat.id, reg_funk.message_user(message.text))
 
 
 ####################______END______#####################
