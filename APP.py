@@ -1,20 +1,8 @@
 import telebot
-import psycopg2
 from dataConect import dataConect
 import reg_funk
 
-
-connection = psycopg2.connect(
-  database = dataConect["pg_name"],
-  user = dataConect["pg_user"],
-  password = dataConect["pg_password"],
-  host = dataConect["pg_host"],
-  port = dataConect['pg_port']
-)
-cursor = connection.cursor()
-
 bot = telebot.TeleBot(dataConect['Token_TG'])
-
 print('start')
 
 
@@ -27,7 +15,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def send_welcome(message):
-  bot.send_message(message.chat.id, "Для початку вибери напрямок /calendar")
+  bot.send_message(message.chat.id, "Для початку вибери напрямок \n /calendar \n /location")
 
 @bot.message_handler(commands=['calendar'])
 def send_calendar(message):
@@ -35,28 +23,28 @@ def send_calendar(message):
   bot.send_message(message.chat.id, text_calendar)
 
 @bot.message_handler(commands=['location'])
-def send_location1(message):
+def send_location_qwest(message):
   bot.send_message(message.chat.id, 'Введіть порядковий номер бажаной локації')
   bot.register_next_step_handler(message, answer_loc)
 
 def answer_loc(message):
-  bot.send_location(message.chat.id, reg_funk.send_location_li(message.text), reg_funk.send_location_lo(message.text))
-
-
+  if reg_funk.send_location_li(message.text):
+    bot.send_location(message.chat.id, reg_funk.send_location_li(message.text), reg_funk.send_location_lo(message.text))
+  else:
+    bot.send_message(message.chat.id, 'Не вірний номер локації, спробуй ще раз \n /location')
 
 
 ########################__TEXT__#####################
 @bot.message_handler(content_types= ['text'])
-def send_helper(message):
+def send_message(message):
   print(message.chat.id)
   print(message.chat.username)
   print(message.text)
-  bot.send_message(message.chat.id, 'hello')
-
+  text_message = reg_funk.message_user(message.text)
+  bot.send_message(message.chat.id, text_message)
 
 
 ####################______END______#####################
 
 bot.polling(none_stop = True , interval = 1)
-cursor.close()
 print('stop')
