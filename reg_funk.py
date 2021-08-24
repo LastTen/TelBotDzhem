@@ -80,22 +80,27 @@ def message_category(text):
   return message_answer
   
 
-def message_user(text):
+def message_text(text):
   qwest = qwest_user(text)
-  category = message_category(text)
   message_answer = []
-  if category == []:
-    for key in qwest:
-      cursor = connection.cursor()
-      like_qwest = f"'{key}%'"
-      cursor.execute(f"SELECT answer FROM answer WHERE qwest LIKE {like_qwest}")
-      answer_text = cursor.fetchall()
-      cursor.close()
-      if answer_text !=[]:
-        message_answer.append(' '.join(answer_text[0]))
-  else:
-    message_answer.append(' \n'.join(category))
-  return message_answer
+  for key in qwest:
+    cursor = connection.cursor()
+    like_qwest = f"'{key}%'"
+    cursor.execute(f"SELECT answer FROM answer WHERE qwest LIKE {like_qwest}")
+    answer_text = cursor.fetchall()
+    cursor.close()
+    if answer_text != []:
+      message_answer.append(answer_text[0][0])
+  return(message_answer)
 
 
-print(message_user('Прfhfh fffhfhf fkfkfkf приві погода '))
+def message_user(text):
+  category = message_category(text)
+  answer = message_text(text)
+  print(category)
+  print(answer)
+
+
+
+
+message_user('Прfhfh fffhfhf fkfkfkf приві погода /strit /disco ')
