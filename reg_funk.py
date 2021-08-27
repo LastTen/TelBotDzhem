@@ -97,10 +97,9 @@ def message_text(text):
 def message_user(text):
   category = message_category(text)
   answer = message_text(text)
-  print(category)
-  print(answer)
+  gener_answer = answer + category
+  if len(gener_answer) > 0:
+    return"\n".join(gener_answer)
+  else:
+    return "Не зрозумів питання для допомлги натисни /help"
 
-
-
-
-message_user('Прfhfh fffhfhf fkfkfkf приві погода /strit /disco ')
