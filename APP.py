@@ -36,8 +36,8 @@ def send_welcome(message):
 def answer(message):
   print(message.text)
   print(message.chat.id)
-  loc = reg_funk.us_location(message)
-  bot.send_location(message.chat.id, loc[0], loc[1])
+  # loc = reg_funk.us_location(message)
+  # bot.send_location(message.chat.id, loc[0], loc[1])
   bot.send_message(message.chat.id, reg_funk.us_qwest(message))
   bot.register_next_step_handler(message, answer_loc)
 
@@ -50,8 +50,6 @@ def answer_loc(message):
     reg_funk.next_qwest(message)
     print(message.text)
     print(message.chat.id)
-    loc = reg_funk.us_location(message)
-    bot.send_location(message.chat.id, loc[0], loc[1])
     bot.send_message(message.chat.id, reg_funk.us_qwest(message))
     bot.register_next_step_handler(message, answer_loc)
   elif message.text == '/stop':
@@ -59,6 +57,10 @@ def answer_loc(message):
   elif message.text == '/new_game':
     reg_funk.ansv_qwest(message)
     bot.send_message(message.chat.id, 'Ви починаєте гру спочатку. /game')
+  elif message.text == '/location':
+    loc = reg_funk.us_location(message)
+    bot.send_location(message.chat.id, loc[0], loc[1])
+    bot.register_next_step_handler(message, answer_loc)
   else:
     print(message.text)
     print(message.chat.id)
