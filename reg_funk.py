@@ -71,9 +71,11 @@ def us_qwest(message):
   cursor = connection.cursor()
   select = f"select qwest from public.qwestions where num_loc = {num_l}"
   cursor.execute(select)
-  res =  cursor.fetchone()[0]
+  res =  cursor.fetchone()[0].split('\\n')
+  res1 = "\n".join(res)
   cursor.close()
-  return res
+  return res1
+
 
 def qwest_loc_ans(num_loc, message):
   text = f"{message.text}".upper()

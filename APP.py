@@ -19,43 +19,28 @@ def send_welcome(message):
 def send_welcome(message):
   bot.send_message(message.chat.id, "Для наступного кроку натисни /game \n Підказки про відповідь знаходяться на локації")
 
-@bot.message_handler(commands=['heppy'])
-def send_welcome(message):
-  text = f'Квест розпочинається для початку натисни /game і слідуй інструкції'
-  if message.chat.id == 469891609:
-    bot.send_message(650665525, f"{text}")
-    bot.send_location(650665525, 50.071007916968064, 31.46478637184649)
-    bot.send_message(491374102, f"{text}")
-    bot.send_location(491374102, 50.071007916968064, 31.46478637184649)
-    bot.send_message(469891609, f"{text}")
-    bot.send_location(469891609, 50.071007916968064, 31.46478637184649)
+# @bot.message_handler(commands=['heppy'])
+# def send_welcome(message):
+#   text = f'Квест розпочинається для початку натисни /game і слідуй інструкції'
+#   if message.chat.id == 469891609:
+#     bot.send_message(650665525, f"{text}")
+#     bot.send_location(650665525, 50.071007916968064, 31.46478637184649)
+#     bot.send_message(491374102, f"{text}")
+#     bot.send_location(491374102, 50.071007916968064, 31.46478637184649)
+#     bot.send_message(469891609, f"{text}")
+#     bot.send_location(469891609, 50.071007916968064, 31.46478637184649)
 
 ### GAME####
 
 @bot.message_handler(commands=['game', 'Game'])
-def send_location_qwest(message):
-  bot.send_message(message.chat.id, 'Для початку натисни /new_game \nдля того щоб продовжити натисни /next')
-  bot.register_next_step_handler(message, answer)
-
 def answer(message):
-  if message.text == "/next":
-    print(message.text)
-    print(message.chat.id)
-    loc = reg_funk.us_location(message)
-    bot.send_location(message.chat.id, loc[0], loc[1])
-    bot.send_message(message.chat.id, reg_funk.us_qwest(message))
-    bot.register_next_step_handler(message, answer_loc)
-  elif message.text == '/new_game':
-    reg_funk.ansv_qwest(message)
-    bot.send_message(message.chat.id, 'Ви починаєте гру спочатку відправ /next для початку')
-    bot.register_next_step_handler(message, answer)
-  elif message.text == '/stop':
-    bot.send_message(message.chat.id, 'Ви вишли з гри для старту натисни /game \nдля навігації натисни /help')
-  else:
-    print(message.text)
-    print(message.chat.id)
-    bot.send_message(message.chat.id, 'Невірний номер питання спробуй ще раз для виходу з гри натисни /stop')
-    bot.register_next_step_handler(message, answer)
+  print(message.text)
+  print(message.chat.id)
+  loc = reg_funk.us_location(message)
+  bot.send_location(message.chat.id, loc[0], loc[1])
+  bot.send_message(message.chat.id, reg_funk.us_qwest(message))
+  bot.register_next_step_handler(message, answer_loc)
+
 
 
 def answer_loc(message):
@@ -71,10 +56,13 @@ def answer_loc(message):
     bot.register_next_step_handler(message, answer_loc)
   elif message.text == '/stop':
     bot.send_message(message.chat.id, 'Ви вишли з гри для старту натисни /game \nдля навігації натисни /help')
+  elif message.text == '/new_game':
+    reg_funk.ansv_qwest(message)
+    bot.send_message(message.chat.id, 'Ви починаєте гру спочатку. /game')
   else:
     print(message.text)
     print(message.chat.id)
-    bot.send_message(message.chat.id, 'Відповідь невірна, спробуй ще раз для, виходу з гри натисни /stop')
+    bot.send_message(message.chat.id, 'Відповідь невірна, спробуй ще раз для, виходу з гри натисни /stop \nдля зкидання ігрового процесу натисни /new_game')
     bot.register_next_step_handler(message, answer_loc)
 
 
